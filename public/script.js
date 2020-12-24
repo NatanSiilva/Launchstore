@@ -38,25 +38,47 @@ const Mask = {
 }
 
 
-
-const formDelete = document.querySelector('#form-delete')
-formDelete.addEventListener("submit", (event) => {
-    const confirmation = confirm("Deseja Deletar?")
-    if(!confirmation) event.preventDefault
-})
-
-
-
 const PhotosUpload = {
+
+    preview: document.querySelector('#photo-preview'),
     uploadLimit: 6,
+    
     handleFileInput(event) {
-        const { files: fileList } = event.target
+       const { files: fileList } = event.target 
+        
+        if(PhotosUpload.hasLimit(event)) return
+
+        Array.from(fileList).forEach(file => {
+            
+            const reader = new FileReader() //Permite ler arquivos
+            reader.readAsDataURL(file) // O ONLOAD vai ficar pronto quando ler os arquivos 
+            reader.onload = () => { //  Quando ele estiver pronto ONLOAD execute essa função
+                const image = new Image() // Mesma coisa de fazerno html<img/>
+                image.src = String(reader.result)
+                const div = PhotosUpload.getContainer(image)
+                PhotosUpload.preview.appendChild(div)
+            }
+        })
+    },
+
+    hasLimit(event) {
+        const { files: fileList } = event.target 
         const { uploadLimit } = PhotosUpload
 
         if(fileList.length > uploadLimit) {
             alert(`Envie no máximo ${uploadLimit} fotos`)
             event.preventDefault()
-            return
+            return true
         }
+
+        return false
+    },
+
+    getContainer(image) {
+        const div = document.createElement('div')
+        div.classList.add('photo')
+        div.onclick = () => alert('remover foto')
+        div.appendChild(image)
+        return div
     }
 }
