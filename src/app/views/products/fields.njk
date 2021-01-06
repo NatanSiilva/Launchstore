@@ -11,7 +11,6 @@
     </div>
 </div>
 
-
 <div class="item">
     <div>Titulo</div>
         <div>
@@ -30,7 +29,6 @@
     </div>
 </div>
 
-
 <div class="item">
     <div>Fotos</div>
         <div>
@@ -47,12 +45,21 @@
             </div>
 
             <div id="photo-preview">
+                {% if files %}
+                    {% for image in files %}
+                        <div class="photo" id="{{image.id}}">
+                            <img src="{{image.src}}" alt="{{image.name}}">
+                            <i class="material-icons"
+                                onclick="PhotosUpload.removeOldPhotos(event)"
+                            >delete_forever</i>
+                        </div>
+                    {% endfor %}
+                    <input type="hidden" name="removed_files">
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
-
-
 
 <div class="item">
     <div>Valor</div>
@@ -64,13 +71,11 @@
             value="{{ product.price }}" 
             onKeydown="Mask.aplly(this, 'formatBRL')"
         />
-
     </div>
     {% if product.old_price %}
         <input type="hidden" name="old_price" value="{{ product.old_price }}"/>
     {% endif %}
 </div>
-
 
 <div class="item">
     <div>Quantidade</div>
@@ -83,11 +88,6 @@
         />
     </div>
 </div>
-
-
-
-
-
 
 {% if (product.status == '1') or (product.status == '0') %}
 <div class="item">
