@@ -1,6 +1,12 @@
 const db = require('../../config/db')
 
 module.exports = {
+    
+    all() {
+        return db.query(`
+            SELECT * FROM products ORDER BY updated_at DESC
+        `)
+    },
 
     create(data) {
         const query = `
@@ -80,6 +86,19 @@ module.exports = {
         return db.query(`
             SELECT * FROM files WHERE product_id = $1
         `, [id])
+    },
+
+    search(params) {
+        const { filter, category } = params
+
+        let query = "",
+            filterQuery = ` WHERE`
+
+        if (category) {
+
+        }
+
+        
     }
  
 }
