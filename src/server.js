@@ -5,7 +5,7 @@ const methodOverride = require('method-override')
 
 const server = express()
 
-server.use(express.urlencoded({ extendens: true }))
+server.use(express.urlencoded({ extendend: true }))
 server.use(express.static('public'))
 server.use(methodOverride('_method'))
 server.use(routes)

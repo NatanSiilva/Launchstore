@@ -1,0 +1,87 @@
+<div class="item">
+    <div>Nome Completo</div>
+        <div class="input">
+            <input 
+            type="text" 
+            name="name" 
+            placeholder="Digite o seu nome completo" 
+            value="{{ user.name }}" 
+        />
+    </div>
+</div>
+
+<div class="item">
+    <div>Email</div>
+        <div class="input">
+            <input 
+            type="email" 
+            name="email" 
+            placeholder="Digite o seu email" 
+            value="{{ user.email }}" 
+            onblur="Validate.aplly(this, 'isEmail')"
+        />
+    </div>
+</div>
+
+<div class="item">
+    <div>Senha</div>
+        <div class="input">
+            <input 
+            type="password" 
+            name="password" 
+            placeholder="Escolha uma senha segura" 
+            value="{{ user.password }}" 
+        />
+    </div>
+</div>
+
+{% if not user.id %}
+    <div class="item">
+        <div>Repitir Senha</div>
+            <div class="input">
+                <input 
+                type="password" 
+                name="passwordRepeat" 
+                placeholder="Repita a senha ecolhida" 
+            />
+        </div>
+    </div>
+{% endif %}
+
+<div class="item">
+    <div>CPF ou CNPJ</div>
+        <div class="input">
+            <input 
+            type="text" 
+            name="cpf_cnpj" 
+            placeholder="Digite o seu documento" 
+            value="{{ user.cpf_cnpj }}" 
+            onkeydown="Mask.aplly(this, 'cpfCnpj')"
+        />
+    </div>
+</div>
+
+<div class="item">
+    <div>CEP</div>
+        <div class="input">
+            <input 
+            type="text" 
+            name="cep" 
+            placeholder="00000-000" 
+            value="{{ user.cep }}" 
+            onkeydown="Mask.aplly(this, 'cep')"
+        />
+    </div>
+</div>
+
+<div class="item">
+    <div>Endereço Completo</div>
+        <div class="input">
+            <input 
+            type="text" 
+            name="eddress" 
+            placeholder="Digite o seu endereço completo" 
+            value="{{ user.cpf_cnpj }}" 
+        />
+    </div>
+</div>

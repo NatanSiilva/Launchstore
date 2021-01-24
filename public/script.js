@@ -34,6 +34,45 @@ const Mask = {
             style: 'currency', //1.000,00
             currency: 'BRL' //R$
         }).format(value/100)
+    },
+
+    cpfCnpj(value) {
+        value = value.replace(/\D/g,"")
+
+        if(value.length > 14) {
+            value = value.slice(0, -1)
+        }
+
+        // check if cnpj - 11.222.333/0001-11
+        if(value.length > 11) {
+            // entra assim 11222333444455
+            
+            // 11.222333444455
+            value = value.replace(/(\d{2})(\d)/, "$1.$2")
+            // 11.222.333444455
+            value = value.replace(/(\d{3})(\d)/, "$1.$2")
+            //11.222.333/444455
+            value = value.replace(/(\d{3})(\d)/, "$1/$2")
+            //11.222.333/4444-55
+            value = value.replace(/(\d{4})(\d)/, "$1-$2")
+
+        } else { // 111.222.333-34
+            value = value.replace(/(\d{3})(\d)/, "$1.$2")
+            value = value.replace(/(\d{3})(\d)/, "$1.$2")
+            value = value.replace(/(\d{3})(\d)/, "$1-$2")
+        }
+        return value
+    },
+
+    cep(value) {
+        value = value.replace(/\D/g,"")
+
+        if(value.length > 8) {
+            value = value.slice(0, -1)
+        }
+
+        value = value.replace(/(\d{5})(\d)/, "$1-$2")
+        return value
     }
 }
 
@@ -188,3 +227,49 @@ const Lightbox = {
     }
 }
  
+
+const Validate = { 
+
+    aplly(input, func) {
+
+        Validate.clearErrors(input)
+       
+        let results = Validate[func](input.value)
+        input.value = results.value
+        if (results.error){
+            Validate.displayError(input, results.error)
+        }
+        
+    },
+
+    displayError(input, error) {
+
+        const div = document.createElement('div')
+        div.classList.add('error')
+        div.innerHTML = error
+        input.parentNode.appendChild(div)
+        input.focus()
+    },
+
+    clearErrors(input) {
+        const errorDiv = input.parentNode.querySelector(".error")
+        if(errorDiv){
+            errorDiv.remove()
+        }
+    },
+
+    isEmail(value) {
+        let error = null
+
+        const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+        if(!value.match(mailFormat)) {
+            error = "Email invalido"
+        }
+
+        return {
+            error,
+            value
+        }
+    }
+}
