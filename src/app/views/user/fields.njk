@@ -6,6 +6,7 @@
             name="name" 
             placeholder="Digite o seu nome completo" 
             value="{{ user.name }}" 
+            required
         />
     </div>
 </div>
@@ -29,7 +30,11 @@
             <input 
             type="password" 
             name="password" 
-            placeholder="Escolha uma senha segura" 
+            {% if not user.id %}
+                placeholder="Escolha uma senha segura" 
+            {% else %}
+                placeholder="Digite sua senha pera atualizar seu cadastro" 
+            {% endif %}
         />
     </div>
 </div>
@@ -56,6 +61,7 @@
             placeholder="Digite o seu documento" 
             value="{{ user.cpf_cnpj }}" 
             onkeydown="Mask.aplly(this, 'cpfCnpj')"
+            onblur="Validate.aplly(this, 'isCpfCnpj')"
         />
     </div>
 </div>
@@ -69,6 +75,7 @@
             placeholder="00000-000" 
             value="{{ user.cep }}" 
             onkeydown="Mask.aplly(this, 'cep')"
+            onblur="Validate.aplly(this, 'isCep')"
         />
     </div>
 </div>

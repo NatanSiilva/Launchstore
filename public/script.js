@@ -37,13 +37,15 @@ const Mask = {
     },
 
     cpfCnpj(value) {
+
         value = value.replace(/\D/g,"")
 
         if(value.length > 14) {
-            value = value.slice(0, -1)
+            value = value.slice(0, -1) //tirando a posição
         }
 
         // check if cnpj - 11.222.333/0001-11
+     
         if(value.length > 11) {
             // entra assim 11222333444455
             
@@ -243,12 +245,11 @@ const Validate = {
     },
 
     displayError(input, error) {
-
         const div = document.createElement('div')
         div.classList.add('error')
         div.innerHTML = error
         input.parentNode.appendChild(div)
-        input.focus()
+        input.focus()// siginifica que senão tiver certo ele fica sempre no imput
     },
 
     clearErrors(input) {
@@ -271,5 +272,38 @@ const Validate = {
             error,
             value
         }
+    },
+
+    isCpfCnpj(value) {
+        let error = null
+
+        const cleanValues = value.replace(/\D/g,"")
+
+        if(cleanValues.length > 11 && cleanValues.length !== 14) {
+            error = "CNPJ incorreto."
+        } else if (cleanValues.length < 12 && cleanValues.length !== 11) {
+            error = "CPF incorreto."
+        }
+
+        return {
+            error,
+            value
+        }
+    },
+
+    isCep(value) {
+        let error = null
+
+        const cleanValues = value.replace(/\D/g,"")
+
+        if(cleanValues.length !== 8) {
+            error = "CEP incorreto."
+        } 
+
+        return {
+            error,
+            value
+        }
     }
+
 }

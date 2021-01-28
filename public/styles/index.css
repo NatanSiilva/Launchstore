@@ -573,7 +573,7 @@ form .item #photo-preview img {
 
 /*validate errors*/
 
-.input  .error {
+.input .error {
     background-color: #e74c3c;
     padding: 4px;
     border-radius: 4px;
