@@ -7,6 +7,11 @@ const session = require('./config/session')
 const server = express()
 
 server.use(session)
+server.use((req, res, next) => {
+    res.locals.session = req.session // Criando uma variavel global com node, para ser acessada emqualquer lugar como njk
+    next()
+})
+
 server.use(express.urlencoded({ extendend: true }))
 server.use(express.static('public'))
 server.use(methodOverride('_method'))
