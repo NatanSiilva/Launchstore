@@ -46,37 +46,37 @@ async function forgot(req, res, next) {
 
 async function  reset(req, res, next) {
     // procurar usuario
-    const { email, password, token } = req.body
-    const user = await User.findOne({ where:{email} })
+    const { email, password, passwordRepeat, token } = req.body
+    const user = await User.findOne({ where:{ email } })
+
     if(!user) return res.render("session/password-reset", {
         user: req.body,
-        token: token,
+        token,
         error: "Usário não cadastrado!"
     })
 
     // verificar se a senha bate
     if(password != passwordRepeat) {
-        return res.render('password-reset',  {
+        return res.render('session/password-reset',  {
             user: req.body,
-            token: token,
+            token,
             error: 'A nova senha e a repitição não coferem.'
         })
     }
 
-    // verificar se o token são o mesmo
-    if (token != user.reset_token) return res.render('password-reset',  {
+    // verificar se o token é o mesmo
+    if (token != user.reset_token) return res.render('session/password-reset',  {
         user: req.body,
-        token: token,
+        token,
         error: 'Token invalido! Solicite uma nova recuperação de senha.'
     })
 
 
     // verificar se o token não expirou
-
     let now = new Date()
     now = now.setHours(now.getHours())
 
-    if(now > user.reset_token_expires) return res.render('password-reset',  {
+    if(now > user.reset_token_expires) return res.render('session/password-reset',  {
         user: req.body,
         error: 'Token expirado! Por favor, solicite uma nova recuperação de senha.'
     })
