@@ -1,6 +1,8 @@
 const db = require('../../config/db')
 const { hash } = require('bcryptjs')
 const fs = require('fs')
+const Product = require('../models/Product')
+
 
 const Product = require('../models/Product')
 const Base = require('../models/Base')
