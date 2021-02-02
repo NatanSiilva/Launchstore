@@ -1,0 +1,5 @@
+MVC - Model View Controller = Padrão de arquitetura de software
+
+Model - Conversar com BD
+Controller - Meio de campo, Regras de Negócios
+View - Apresentação (Front end)
