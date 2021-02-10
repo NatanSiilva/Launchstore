@@ -1,17 +1,10 @@
-const db = require('../../config/db')
-const { hash } = require('bcryptjs')
-const fs = require('fs')
-const Product = require('../models/Product')
-
-
-const Product = require('../models/Product')
 const Base = require('../models/Base')
 
 Base.init({ table: 'users' })
 
-const User = {
-    
+module.exports = {
     ...Base,
+}
 
     // async create(data) {
     //     try {
@@ -48,49 +41,48 @@ const User = {
     //     }
     // },
 
-    async update(id, fields) {
-        let query = `UPDATE users SET`
+    // async update(id, fields) {
+    //     let query = `UPDATE users SET`
 
-        Object.keys(fields).map((key, index, array) => {
-            if((index + 1) < array.length) {
-                query = `${query}
-                    ${key} = '${fields[key]}',
-                `
-            } else {
-                query = `${query}
-                    ${key} = '${fields[key]}'
-                    WHERE id = ${id}
-                `
-            }
-        })
+    //     Object.keys(fields).map((key, index, array) => {
+    //         if((index + 1) < array.length) {
+    //             query = `${query}
+    //                 ${key} = '${fields[key]}',
+    //             `
+    //         } else {
+    //             query = `${query}
+    //                 ${key} = '${fields[key]}'
+    //                 WHERE id = ${id}
+    //             `
+    //         }
+    //     })
 
-        await db.query(query) 
-        return
-    },
+    //     await db.query(query) 
+    //     return
+    // },
 
-    async delete(id) {
-        // pegar todos os produtos
-        let results = await db.query("SELECT * FROM products WHERE user_id = $1", [id])
-        const products = results.rows
+    // async delete(id) {
+    //     // pegar todos os produtos
+    //     let results = await db.query("SELECT * FROM products WHERE user_id = $1", [id])
+    //     const products = results.rows
 
-        // dos produtos, pegar todas as imagens
-        const allFilePromise = products.map(product => Product.files(product.id))
-        let promiseResults = await Promise.all(allFilePromise)
+    //     // dos produtos, pegar todas as imagens
+    //     const allFilePromise = products.map(product => Product.files(product.id))
+    //     let promiseResults = await Promise.all(allFilePromise)
 
-        // rodar a remoção do usuário
-        await db.query('DELETE FROM users WHERE id = $1', [id])
+    //     // rodar a remoção do usuário
+    //     await db.query('DELETE FROM users WHERE id = $1', [id])
 
-        // remover as imagens da pasta public
-        promiseResults.map(results => {
-            results.rows.map(file => { 
-                try {
-                    fs.unlinkSync(file.path)
-                } catch (error) {
-                    console.error(error)
-                } 
-            })
-        })
-    }
-}
+    //     // remover as imagens da pasta public
+    //     promiseResults.map(results => {
+    //         results.rows.map(file => { 
+    //             try {
+    //                 fs.unlinkSync(file.path)
+    //             } catch (error) {
+    //                 console.error(error)
+    //             } 
+    //         })
+    //     })
+    // }
 
-module.exports = User
+

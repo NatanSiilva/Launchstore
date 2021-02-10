@@ -1,44 +1,52 @@
 const db = require('../../config/db')
-const { create } = require('./Product')
 
+function find(filters, table){
+    let query = `SELECT * FROM ${table}`
 
+    if(filters) {
+        Object.keys(filters).map(key => {
+            //WHERE OR AND
+            query += `${key}`
+    
+            Object.keys(filters[key]).map((field) => {
+                query += `${field} = '${filters[key][field]}'`
+            })
+        })
+    }
 
+    return db.query(query)
+}
 
 const Base = {
+    
     init({ table }) {
         if(!table) throw new Error('Ivalid Params')
-
         this.table = table
-
         return this
     },
 
-    async findOne(filters) {
-        let query = `SELECT * FROM ${this.table}`
-
-        Object.keys(filters).map(key => {
-
-            query = `${query}
-                ${key}
-            `
-
-            Object.keys(filters[key]).map((field) => {
-                query = `${query} ${field} = '${filters[key][field]}'`
-            })
-        })
-
-        const results = await db.query(query)
-
+    async find(id) {
+        const results = await find({ where: { id } }, this.table)
         return results.rows[0]
     },
 
+    async findOne(filters) {
+        const results = await find(filters, this.table)
+        return results.rows[0]
+    },
+
+    async findAll(filters) {
+        const results = await find(filters, this.table)
+        return results.rows
+    },
+
     async create(fields) {
-        //User.create({name: 'mayke})
+        //User.create({name: 'mayke'})
         try {
             let keys = [],
                 values = []
 
-            Object.keys(fields).map((key, index, array) => {
+            Object.keys(fields).map((key, index, array) => { // Quando criamos o Key teremos um array
                 keys.push(key)
                 values.push(fields[key])
 
@@ -67,16 +75,16 @@ const Base = {
 
         try {
             
-            let upadate = []
+            let update = []
 
             Object.keys(fields).map((key, index, array) => {
                 // category_id=($1)
                 const line = `${key} = '${fields[key]}'`
-                upadate.push(line)
+                update.push(line)
             })
 
             let query = `UPDATE ${this.table} SET
-                ${upadate.join(',')} WHERE id = ${id}
+                ${update.join(',')} WHERE id = ${id}
             `
 
             return db.query(query) 
@@ -86,7 +94,7 @@ const Base = {
     },
 
     delete(id) {
-        return db.query('DELETE FROM products WHERE id = $1', [id])
+        return db.query(`DELETE FROM ${this.table} WHERE id = $1`, [id])
     },
 
 }
